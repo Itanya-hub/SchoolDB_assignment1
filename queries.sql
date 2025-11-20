@@ -246,3 +246,20 @@ WHERE
     CourseName LIKE '%Design%' OR CourseName LIKE '%wood%'
 ORDER BY
     CourseName;
+    
+    -- 16. Report: Find the 2nd and 3rd newest enrolled students (using LIMIT and OFFSET for pagination)
+SELECT
+    FirstName,
+    LastName,
+    EnrollmentDate
+FROM
+    Students
+ORDER BY
+    EnrollmentDate DESC
+LIMIT 2 OFFSET 1; -- LIMIT 2 (fetch 2 rows) OFFSET 1 (skip the first row)
+
+
+-- 17. Action: Execute Stored Procedure (VG Requirement)
+-- I am running the EnrollStudent procedure to simulate registering Student 1 into Course 3.
+-- This shows that the stored logic works.
+CALL EnrollStudent(1, 3);

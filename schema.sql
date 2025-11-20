@@ -47,3 +47,69 @@ CREATE TABLE Enrollments (
     FOREIGN KEY (Student_ID) REFERENCES Students(Student_ID),
     FOREIGN KEY (Course_ID) REFERENCES Courses(Course_ID)
 );
+
+-- Indexing--
+-- I am indexing LastName to speed up searches performed by staff.
+CREATE INDEX idx_student_lastname ON Students (LastName);
+
+-- 1. Report View: Course Enrollment Count
+-- This fulfills the requirement for a report-style view.
+CREATE VIEW CourseEnrollmentCount AS
+SELECT
+    C.CourseName,
+    COUNT(E.Student_ID) AS TotalStudents
+FROM
+    Courses AS C
+JOIN
+    Enrollments AS E ON C.Course_ID = E.Course_ID
+GROUP BY
+    C.CourseName;
+
+-- 2. Simplified View: Student Course Details
+-- This fulfills the requirement for a simplified view to ease common SELECT queries.
+CREATE VIEW StudentCourseDetails AS
+SELECT
+    S.FirstName,
+    S.LastName,
+    C.CourseName,
+    E.Grade
+FROM
+    Students AS S
+JOIN
+    Enrollments AS E ON S.Student_ID = E.Student_ID
+JOIN
+    Courses AS C ON E.Course_ID = C.Course_ID;
+    
+-- 3. Simplified View: Teacher Workload (Extra View)
+CREATE VIEW TeacherWorkload AS
+SELECT
+    T.FirstName,
+    T.LastName,
+    COUNT(C.Course_ID) AS TotalCoursesTaught
+FROM
+    Teachers AS T
+LEFT JOIN
+    Courses AS C ON T.Teacher_ID = C.Teacher_ID
+GROUP BY
+    T.Teacher_ID, T.FirstName, T.LastName;
+    
+    
+    
+    -- Stored Procedure (Simulates enrolling a student)
+DELIMITER //
+
+CREATE PROCEDURE EnrollStudent(
+    IN student_id_param INT,
+    IN course_id_param INT
+)
+BEGIN
+    -- I check if the enrollment already exists to prevent duplication
+    IF NOT EXISTS (
+        SELECT 1 FROM Enrollments WHERE Student_ID = student_id_param AND Course_ID = course_id_param
+    ) THEN
+        INSERT INTO Enrollments (Student_ID, Course_ID, EnrollmentDate)
+        VALUES (student_id_param, course_id_param, CURDATE());
+    END IF;
+END //
+
+DELIMITER ;
