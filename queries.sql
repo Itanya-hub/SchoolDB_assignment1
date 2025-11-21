@@ -1,4 +1,5 @@
 -- 1. Report: List all students, their enrolled courses, and grades (3-Table JOIN)
+USE SchoolProgram_project ;
 SELECT
     S.FirstName,
     S.LastName,
@@ -20,6 +21,7 @@ SELECT
     S.FirstName AS StudentFirstName,
     S.LastName AS StudentLastName,
     C.CourseName,
+    
     T.FirstName AS TeacherFirstName,
     T.LastName AS TeacherLastName,
     E.Grade,
@@ -53,7 +55,7 @@ GROUP BY
 ORDER BY
     TotalStudentsEnrolled DESC, C.CourseName;
     
-    -- 4. Report: List all courses and schedules taught by a specific teacher (e.g., Tanya Larsson)
+    -- 4. Report: List all courses and schedules taught by a specific teacher 
 SELECT
     T.FirstName AS TeacherFirstName,
     T.LastName AS TeacherLastName,
@@ -73,6 +75,8 @@ ORDER BY
     S.DayOfWeek, S.StartTime;
     
     -- 5. Report: Identify teachers who teach more than 1 course (using COUNT and HAVING)
+    -- It isolates records (Larsson and Ugglas) who teach more than one course to prove the logic works.
+    
 SELECT
     T.FirstName,
     T.LastName,
@@ -226,8 +230,7 @@ SELECT * FROM Teachers WHERE Teacher_ID = 101;
 
 
 -- 14. Action: DELETE a specific data row (Simulate removing specific data)
--- It will delete an enrollment that has no grade yet (e.g., Hugo in WD101)
--- Student 207 (Hugo) is currently taking WD101
+-- It will delete an enrollment that has no grade yet 
 
 DELETE FROM Enrollments
 WHERE Student_ID = 207 AND Course_ID = 'WD101';
@@ -259,7 +262,4 @@ ORDER BY
 LIMIT 2 OFFSET 1; -- LIMIT 2 (fetch 2 rows) OFFSET 1 (skip the first row)
 
 
--- 17. Action: Execute Stored Procedure (VG Requirement)
--- I am running the EnrollStudent procedure to simulate registering Student 1 into Course 3.
--- This shows that the stored logic works.
-CALL EnrollStudent(1, 3);
+

@@ -53,7 +53,6 @@ CREATE TABLE Enrollments (
 CREATE INDEX idx_student_lastname ON Students (LastName);
 
 -- 1. Report View: Course Enrollment Count
--- This fulfills the requirement for a report-style view.
 CREATE VIEW CourseEnrollmentCount AS
 SELECT
     C.CourseName,
@@ -66,7 +65,6 @@ GROUP BY
     C.CourseName;
 
 -- 2. Simplified View: Student Course Details
--- This fulfills the requirement for a simplified view to ease common SELECT queries.
 CREATE VIEW StudentCourseDetails AS
 SELECT
     S.FirstName,
@@ -93,11 +91,11 @@ LEFT JOIN
 GROUP BY
     T.Teacher_ID, T.FirstName, T.LastName;
     
-    
-    
     -- Stored Procedure (Simulates enrolling a student)
 DELIMITER //
 
+-- This tells the MySQL client to stop recognizing the semicolon (;) as the end of a command and start looking for // instead.
+-- This allows the MySQL client to process the multiple semicolons (;) inside the procedure block correctly.
 CREATE PROCEDURE EnrollStudent(
     IN student_id_param INT,
     IN course_id_param INT
@@ -112,4 +110,4 @@ BEGIN
     END IF;
 END //
 
-DELIMITER ;
+DELIMITER ; -- This returns the delimiter back to the standard semicolon.
